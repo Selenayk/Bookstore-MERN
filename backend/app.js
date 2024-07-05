@@ -49,6 +49,23 @@ app.get('/books', async (req, res) => {
   }
 });
 
+// Route for getting one book from database by id
+app.get('/books/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.findById(id);
+
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    return res.status(200).json(book);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send({ message: 'Internal Server Error' });
+  }
+});
+
 mongoose
   .connect(mongoDBUrl)
   .then(() => {
