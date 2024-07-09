@@ -42,7 +42,7 @@ const EditBook = () => {
       })
       .catch((err) => {
         setLoading(false);
-        alert('An error happened. Please Chack console');
+        alert('An error happened. Please check console');
         console.log(err);
       });
   };
