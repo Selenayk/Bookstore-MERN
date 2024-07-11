@@ -3,6 +3,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 const EditBook = () => {
   const [title, setTitle] = useState('');
@@ -11,6 +12,7 @@ const EditBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     setLoading(true);
     axios
@@ -38,11 +40,13 @@ const EditBook = () => {
       .put(`http://localhost:2000/api/books/${id}`, data)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar('Book Edited successfully', { variant: 'success' });
         navigate('/');
       })
       .catch((err) => {
         setLoading(false);
-        alert('An error happened. Please check console');
+        // alert('An error happened. Please check console');
+        enqueueSnackbar('Error', { variant: 'error' });
         console.log(err);
       });
   };
@@ -72,7 +76,9 @@ const EditBook = () => {
           />
         </div>
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500 font-bold">Publish Year</label>
+          <label className="text-xl mr-4 text-gray-500 font-bold">
+            Publish Year
+          </label>
           <input
             type="number"
             value={publishYear}
@@ -80,7 +86,10 @@ const EditBook = () => {
             className="border-2 border-gray-500 px-4 py-2  w-full "
           />
         </div>
-        <button className="p-3 bg-gray-400 m-9 font-bold text-xl" onClick={handleEditBook}>
+        <button
+          className="p-3 bg-gray-400 m-9 font-bold text-xl"
+          onClick={handleEditBook}
+        >
           Save
         </button>
       </div>

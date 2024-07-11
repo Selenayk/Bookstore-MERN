@@ -3,6 +3,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 const CreateBooks = () => {
   const [title, setTitle] = useState('');
@@ -10,6 +11,7 @@ const CreateBooks = () => {
   const [publishYear, setPublishYear] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const handleSaveBook = () => {
     const data = {
       title,
@@ -21,11 +23,13 @@ const CreateBooks = () => {
       .post('http://localhost:2000/api/books', data)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar('Book created successfully', { variant: 'success' });
         navigate('/');
       })
       .catch((error) => {
         setLoading(false);
-        alert('An error happened. Please check console');
+        // alert('An error happened. Please check console');
+        enqueueSnackbar('Error', { variant: 'error' });
         console.log(error);
       });
   };
@@ -55,7 +59,9 @@ const CreateBooks = () => {
           />
         </div>
         <div className="my-4">
-          <label className="text-xl mr-4 text-gray-500 font-bold">Publish Year</label>
+          <label className="text-xl mr-4 text-gray-500 font-bold">
+            Publish Year
+          </label>
           <input
             type="number"
             value={publishYear}
@@ -63,7 +69,10 @@ const CreateBooks = () => {
             className="border-2 border-gray-500 px-4 py-2  w-full "
           />
         </div>
-        <button className="p-3 bg-gray-400 m-9 font-bold text-xl" onClick={handleSaveBook}>
+        <button
+          className="p-3 bg-gray-400 m-9 font-bold text-xl"
+          onClick={handleSaveBook}
+        >
           Save
         </button>
       </div>
